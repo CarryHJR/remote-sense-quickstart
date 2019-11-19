@@ -2,7 +2,7 @@
 
 ### tutorial posts
 
-https://medium.com/@carryhjr/remote-sense-change-detection-quick-start-65d00a89622b
+https://www.jianshu.com/p/4dd8e4d413e0
 
 ### tutorial code
 
@@ -30,7 +30,7 @@ The tranditional method is also popular, like "iterative slow feature analysis"
 ## 2. scene classification
 ### tutorial posts
 
-https://medium.com/@carryhjr/scene-classification-quick-start-and-beat-the-official-baseline-96a2e842baae
+https://www.jianshu.com/p/76c66b9b0467
 
 ### tutorial code
 
@@ -67,3 +67,9 @@ scene-classification-quickstart.ipynb
 ### current method
 
 Personlly, although so some papers are proposed every year, the best methods are raw deep netural network like SENet 154, EfficientNet, to name a few.
+
+## 3. scene classification attention visualization
+### code
+AID-view-attention.ipynb
+### tutorial
+https://www.jianshu.com/p/d7c6113a851c
