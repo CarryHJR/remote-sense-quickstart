@@ -1,9 +1,13 @@
 ## 桥梁检测 bridge-detection
+
+![](https://upload-images.jianshu.io/upload_images/23853026-e39143801dc46f7c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ### tutorial
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/bridge-detection/README.md
 ### code
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/bridge-detection/
 ## 变化检测 change-detection
+![从简显示第一个图](https://upload-images.jianshu.io/upload_images/141140-02e559e22adf7aaa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ### code
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/change-detection/change-detection-quick-start.ipynb
@@ -29,6 +33,8 @@ The tranditional method is also popular, like "iterative slow feature analysis"
 
 
 ## 场景分类 scene classification
+![image.png](https://upload-images.jianshu.io/upload_images/141140-e6437890bd9be580.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ### tutorial 
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/scene-classification/REMDME.md
 
@@ -69,6 +75,7 @@ https://github.com/CarryHJR/remote-sense-quickstart/blob/master/scene-classifica
 Personlly, although so some papers are proposed every year, the best methods are raw deep netural network like SENet 154, EfficientNet, to name a few.
 
 ## 特征图可视化 scene classification attention visualization
+![demo](https://upload-images.jianshu.io/upload_images/141140-563618a6289599d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ### code
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/view-attention/AID-view-attention.ipynb
 
