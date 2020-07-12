@@ -1,14 +1,4 @@
-## 数据
-第一步：获取容器镜像。在安装好Docker的机器上执行下面命令，获取对应的数据：
-```
-docker pull 2020gaofen/data:automatic_bridge_detection_in_optical_images_2020
-```
-第二步：将数据导出到电脑硬盘。参赛数据在容器的/data路径下，执行下面命令将数据拷贝到电脑硬盘中，下面是将数据导出到硬盘
-的/mnt/share/data文件夹下：
-```
-docker run -it -v /mnt/share/data:/test 2020gaofen/data:automatic_bridge_detection_in_optical_images_2020 /bin/sh
-cp -r /data/ /test
-```
+
 ## 预处理
 这个xml格式有点特别
 
