@@ -1,4 +1,4 @@
-## change-detection
+## 变化检测 change-detection
 
 ### code
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/change-detection/change-detection-quick-start.ipynb
@@ -23,7 +23,7 @@ The Siamese architecture processed both images separately at first by iden-tical
 The tranditional method is also popular, like "iterative slow feature analysis"
 
 
-## scene classification
+## 场景分类 scene classification
 ### tutorial 
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/scene-classification/REMDME.md
 
@@ -63,7 +63,7 @@ https://github.com/CarryHJR/remote-sense-quickstart/blob/master/scene-classifica
 
 Personlly, although so some papers are proposed every year, the best methods are raw deep netural network like SENet 154, EfficientNet, to name a few.
 
-## scene classification attention visualization
+## 特征图可视化 scene classification attention visualization
 ### code
 https://github.com/CarryHJR/remote-sense-quickstart/blob/master/view-attention/AID-view-attention.ipynb
 
