@@ -1,13 +1,9 @@
-## 1. change-detection
+## change-detection
 
-### tutorial posts
-
-https://www.jianshu.com/p/4dd8e4d413e0
-
-### tutorial code
-
-change-detection-quick-start.ipynb
-
+### code
+https://github.com/CarryHJR/remote-sense-quickstart/blob/master/change-detection/change-detection-quick-start.ipynb
+### tutorial
+https://github.com/CarryHJR/remote-sense-quickstart/blob/master/change-detection/README.md
 ### datasets
 
 Onera Satellite Change Detection Dataset - https://rcdaudt.github.io/oscd/ - 14 pairs - 13 spectral - multi resolution(10,20,60) - 2018
@@ -27,14 +23,13 @@ The Siamese architecture processed both images separately at first by iden-tical
 The tranditional method is also popular, like "iterative slow feature analysis"
 
 
-## 2. scene classification
-### tutorial posts
+## scene classification
+### tutorial 
+https://github.com/CarryHJR/remote-sense-quickstart/blob/master/scene-classification/REMDME.md
 
-https://www.jianshu.com/p/76c66b9b0467
+### code
 
-### tutorial code
-
-scene-classification-quickstart.ipynb
+https://github.com/CarryHJR/remote-sense-quickstart/blob/master/scene-classification/scene-classification-quickstart.ipynb
 
 ### dataset
 
@@ -68,8 +63,9 @@ scene-classification-quickstart.ipynb
 
 Personlly, although so some papers are proposed every year, the best methods are raw deep netural network like SENet 154, EfficientNet, to name a few.
 
-## 3. scene classification attention visualization
+## scene classification attention visualization
 ### code
-AID-view-attention.ipynb
+https://github.com/CarryHJR/remote-sense-quickstart/blob/master/view-attention/AID-view-attention.ipynb
+
 ### tutorial
-https://www.jianshu.com/p/d7c6113a851c
+https://github.com/CarryHJR/remote-sense-quickstart/blob/master/view-attention/README.md
