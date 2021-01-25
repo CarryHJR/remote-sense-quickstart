@@ -1,3 +1,6 @@
+## 语义分割 semantic-segmentation
+https://github.com/CarryHJR/remote-sense-quickstart/tree/master/semantic-segmentation
+
 ## 变化检测 change-detection
 ![从简显示第一个图](https://upload-images.jianshu.io/upload_images/141140-02e559e22adf7aaa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
