@@ -1,11 +1,3 @@
-## 桥梁检测 bridge-detection
-
-![](https://upload-images.jianshu.io/upload_images/23853026-e39143801dc46f7c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-### tutorial
-https://github.com/CarryHJR/remote-sense-quickstart/blob/master/bridge-detection/README.md
-### code
-https://github.com/CarryHJR/remote-sense-quickstart/blob/master/bridge-detection/
 ## 变化检测 change-detection
 ![从简显示第一个图](https://upload-images.jianshu.io/upload_images/141140-02e559e22adf7aaa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
