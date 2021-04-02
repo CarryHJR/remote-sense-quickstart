@@ -1,3 +1,43 @@
+# 复赛docker本地测试方法
+先将server.py里面的端口改一下
+```
+my_infer.run(debuge=False, ip="0.0.0.0")
+```
+然后docker运行的时候加上`-p 8080:8080`
+
+然后以 `suichang_round1_test_partA_210120/003000.tif` 为例，用自己的模型推理方式推理一遍，算一下`np.sum(label)`
+
+然后运行这段
+```python
+import base64
+import requests
+from io import BytesIO
+from PIL import Image
+import json
+
+
+def loader2json(data):
+    send_json = {}
+    bast64_data = base64.b64encode(data)
+    bast64_str = str(bast64_data,'utf-8')
+    send_json['img'] = bast64_str
+    send_json = json.dumps(send_json)
+    return send_json
+
+img_path = 'suichang_round1_test_partA_210120/003000.tif'
+fin=open(img_path,'rb')
+img=fin.read()
+data_json = loader2json(img)
+url = "http://127.0.0.1:8080/tccapi"
+res = requests.post(url, data_json, timeout=3)
+bast64_data = res.text.encode(encoding='utf-8')
+bytesIO = BytesIO()
+label = np.array(Image.open(BytesIO(bytearray(base64.b64decode(bast64_data)))))
+print(np.sum(label))
+
+```
+看一下两次的sum是否一致即可
+
 # environment
 mmseg v0.10.0
 
@@ -55,6 +95,5 @@ mmseg/datasets/custom.py
 deeplabv3+ r101 水平、竖直翻转, bs 16 80000 iter
 
 官网的数据集下载解压后 改动84、85、98行的数据集位置即可，不需要对数据集预处理
-
 
 
