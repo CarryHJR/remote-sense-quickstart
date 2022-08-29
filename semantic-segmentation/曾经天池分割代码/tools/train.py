@@ -1,17 +1,15 @@
-# Copyright (c) OpenMMLab. All rights reserved.
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
 import argparse
 import copy
 import os
 import os.path as osp
 import time
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
 
 import mmcv
-#  import mmcv_custom
 import torch
-from mmcv.cnn.utils import revert_sync_batchnorm
-from mmcv.runner import get_dist_info, init_dist
+from mmcv.runner import init_dist
 from mmcv.utils import Config, DictAction, get_git_hash
 
 from mmseg import __version__
@@ -19,6 +17,8 @@ from mmseg.apis import set_random_seed, train_segmentor
 from mmseg.datasets import build_dataset
 from mmseg.models import build_segmentor
 from mmseg.utils import collect_env, get_root_logger
+
+import time
 
 
 def parse_args():
@@ -83,8 +83,7 @@ def main():
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
         cfg.work_dir = osp.join('./work_dirs', osp.dirname(args.config).split('/')[-1],
-                            osp.splitext(osp.basename(args.config))[0])
-
+                                osp.splitext(osp.basename(args.config))[0])
     if args.load_from is not None:
         cfg.load_from = args.load_from
     if args.resume_from is not None:
@@ -100,9 +99,6 @@ def main():
     else:
         distributed = True
         init_dist(args.launcher, **cfg.dist_params)
-        # gpu_ids is used to calculate iter when resuming checkpoint
-        _, world_size = get_dist_info()
-        cfg.gpu_ids = range(world_size)
 
     # create work_dir
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
@@ -138,20 +134,9 @@ def main():
     meta['exp_name'] = osp.basename(args.config)
 
     model = build_segmentor(
-        cfg.model,
-        train_cfg=cfg.get('train_cfg'),
-        test_cfg=cfg.get('test_cfg'))
-    model.init_weights()
+        cfg.model, train_cfg=cfg.train_cfg, test_cfg=cfg.test_cfg)
 
-    # SyncBN is not support for DP
-    if not distributed:
-        warnings.warn(
-            'SyncBN is only supported with DDP. To be compatible with DP, '
-            'we convert SyncBN to BN. Please use dist_train.sh which can '
-            'avoid this error.')
-        model = revert_sync_batchnorm(model)
-
-    #  logger.info(model)
+    logger.info(model)
 
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:
@@ -168,8 +153,6 @@ def main():
             PALETTE=datasets[0].PALETTE)
     # add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES
-    # passing checkpoint meta for saving best checkpoint
-    meta.update(cfg.checkpoint_config.meta)
     train_segmentor(
         model,
         datasets,
@@ -182,6 +165,7 @@ def main():
     time_hour = (toc - tic) / 3600
     logger.info('time waste: %f hours' % time_hour)
     logger.info('use %s' % args.config)
+
 
 
 if __name__ == '__main__':
