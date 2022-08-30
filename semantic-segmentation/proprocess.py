@@ -15,7 +15,7 @@ import mmcv
 import glob
 label_paths = glob.glob('/home/user/workplace/python/mmsegmentation-0.19.0/work_dirs/rsipac2022_stage1_baseline/convnext_l_bs32_40k_ms/results/*.png')
 def process(label_path):
-    label = np.array(Image.open(label_path))
+    label = np.array(Image.open(label_path), dtype=np.int32)
     label = label * 100
     label = Image.fromarray(label)
     label.save(label_path)
