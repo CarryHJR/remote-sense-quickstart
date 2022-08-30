@@ -14,7 +14,6 @@ from mmseg.utils import get_root_logger
 from .builder import DATASETS
 from .pipelines import Compose, LoadAnnotations
 from PIL import Image
-from mmseg.core import metrics_fast
 
 
 
@@ -358,6 +357,7 @@ class CustomDataset(Dataset):
 
         return palette
 
+
     def evaluate(self,
                  results,
                  metric='mIoU',
@@ -393,7 +393,7 @@ class CustomDataset(Dataset):
             if gt_seg_maps is None:
                 gt_seg_maps = self.get_gt_seg_maps()
             num_classes = len(self.CLASSES)
-            ret_metrics, freq = eval_metrics(
+            ret_metrics = eval_metrics(
                 results,
                 gt_seg_maps,
                 num_classes,
@@ -403,7 +403,7 @@ class CustomDataset(Dataset):
                 reduce_zero_label=self.reduce_zero_label)
         # test a list of pre_eval_results
         else:
-            ret_metrics, freq = pre_eval_to_metrics(results, metric)
+            ret_metrics = pre_eval_to_metrics(results, metric)
 
         # Because dataset.CLASSES is required for per-eval.
         if self.CLASSES is None:
@@ -426,12 +426,6 @@ class CustomDataset(Dataset):
         ret_metrics_class.update({'Class': class_names})
         ret_metrics_class.move_to_end('Class', last=False)
 
-        ret_metrics_class.update({'freq': [np.round(x * 100, 2) for x in freq]})
-
-        fwiou = sum(freq * np.nan_to_num(ret_metrics_class['IoU']))
-        fwiou = np.round(fwiou, 2)
-        ret_metrics_summary.update({'fwiou': fwiou})
-
         # for logger
         class_table_data = PrettyTable()
         for key, val in ret_metrics_class.items():
@@ -439,7 +433,7 @@ class CustomDataset(Dataset):
 
         summary_table_data = PrettyTable()
         for key, val in ret_metrics_summary.items():
-            if key == 'aAcc' or key == 'fwiou':
+            if key == 'aAcc':
                 summary_table_data.add_column(key, [val])
             else:
                 summary_table_data.add_column('m' + key, [val])
@@ -464,7 +458,6 @@ class CustomDataset(Dataset):
             })
 
         return eval_results
-
 
     def results2img(self, results, imgfile_prefix, to_label_id, indices=None):
         """Write the segmentation results to images.
@@ -546,63 +539,3 @@ class CustomDataset(Dataset):
                                         indices)
 
         return result_files
-
-
-    def evaluate_fast(self, results, logger=None, drop_bg=False, **kwargs):
-        """Evaluate the dataset using the Auto Seg-Loss evaluator.
-        Args:
-            results (list): Testing results of the dataset.
-            logger (logging.Logger | None | str): Logger used for printing
-                related information during evaluation. Default: None.
-        Returns:
-            dict[str, float]: Default metrics.
-        """
-
-        eval_results = {}
-        gt_seg_maps = self.get_gt_seg_maps()
-        if self.CLASSES is None:
-            num_classes = len(
-                reduce(np.union1d, [np.unique(_) for _ in gt_seg_maps]))
-        else:
-            num_classes = len(self.CLASSES)
-
-        class_iou, class_freq, class_biou, class_bf1, class_acc, global_acc = metrics_fast(results, gt_seg_maps, num_classes, label_map=self.label_map, reduce_zero_label=self.reduce_zero_label, drop_bg=drop_bg)
-        summary_str = ''
-        summary_str += 'per class results:\n'
-
-        line_format = '{:<15} {:>10} {:>10} {:>10} {:>10} {:>10}\n'
-        summary_str += line_format.format('Class', 'IoU', 'Freq', 'BIoU', 'BF1', 'Acc')
-        if self.CLASSES is None:
-            class_names = tuple(range(num_classes))
-        else:
-            class_names = self.CLASSES
-        for i in range(num_classes):
-            iou_str = '{:.2f}'.format(class_iou[i] * 100)
-            freq_str = '{:.2f}'.format(class_freq[i] * 100)
-            acc_str = '{:.2f}'.format(class_acc[i] * 100)
-            if drop_bg:
-                biou_str = '-' if i == 0 else '{:.2f}'.format(class_biou[i] * 100)
-                bf1_str = '-' if i == 0 else '{:.2f}'.format(class_bf1[i-1] * 100)
-
-            summary_str += line_format.format(class_names[i], iou_str, freq_str, biou_str, bf1_str, acc_str)
-        summary_str += 'Summary:\n'
-        line_format = '{:<15} {:>10} {:>10} {:>10} {:>10} {:>10} {:>10}\n'
-        summary_str += line_format.format('Scope', 'mIoU', 'FWIoU', 'BIoU', 'BF1', 'mAcc', 'gAcc')
-
-        miou_str = '{:.2f}'.format(np.nanmean(class_iou) * 100)
-        fwiou_str = '{:.2f}'.format(np.nanmean(class_freq * class_iou) * num_classes * 100)
-        biou_str = '{:.2f}'.format(np.nanmean(class_biou) * 100)
-        bf1_str = '{:.2f}'.format(np.nanmean(class_bf1) * 100)
-        macc_str = '{:.2f}'.format(np.nanmean(class_acc) * 100)
-        gacc_str = '{:.2f}'.format(global_acc * 100)
-        summary_str += line_format.format('global', miou_str, fwiou_str, biou_str, bf1_str, macc_str, gacc_str)
-        print_log(summary_str, logger)
-
-        eval_results['mIoU'] = np.nanmean(class_iou).item()
-        eval_results['FWIoU'] = (np.nanmean(class_freq * class_iou) * num_classes).item()
-        eval_results['BIoU'] = np.nanmean(class_biou).item()
-        eval_results['BF1'] = np.nanmean(class_bf1).item()
-        eval_results['mAcc'] = np.nanmean(class_acc).item()
-        eval_results['aAcc'] = global_acc.item()
-
-        return eval_results
